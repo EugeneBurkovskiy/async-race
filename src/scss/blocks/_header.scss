@@ -1,0 +1,13 @@
+.race__header {
+  width: 220px;
+  display: flex;
+  justify-content: space-between;
+  &-garage,
+  &-winners {
+    width: 100px;
+    height: 30px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  margin-bottom: 20px;
+}

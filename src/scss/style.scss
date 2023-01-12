@@ -1,7 +1,15 @@
 @import "./blocks/reset";
 @import "./blocks/variables";
+@import "./blocks/header";
+@import "./blocks//generator";
+@import "./blocks/garage";
 
+@font-face {
+  font-family: "Montserrat";
+  src: url("../assets/fonts/Montserrat-VariableFont_wght.ttf");
+}
 html {
+  font-family: "Montserrat";
   font-size: 18px;
 }
 
@@ -9,4 +17,20 @@ body {
   color: $font-color;
   background-color: $background-main;
   user-select: none;
+}
+
+button {
+  transition: all 0.5s;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.race {
+  padding: 50px;
+}
+
+#car {
+  fill: #ffb600;
+  width: 70px;
 }

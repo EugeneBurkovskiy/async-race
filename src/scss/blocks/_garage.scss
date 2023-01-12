@@ -1,0 +1,45 @@
+.race__garage {
+  &-header {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  &-page {
+    margin-bottom: 20px;
+  }
+  &-list-item {
+    margin-bottom: 30px;
+  }
+  &-list-item-header {
+    display: flex;
+    column-gap: 10px;
+    margin-bottom: 10px;
+  }
+  &-list-item-select,
+  &-list-item-remove {
+    width: 80px;
+    border-radius: 5px;
+    font-weight: 900;
+  }
+  &-list-item-start,
+  &-list-item-stop {
+    width: 30px;
+    height: 25px;
+    font-weight: 900;
+    border-radius: 5px;
+  }
+  &-list-item-road {
+    width: 95%;
+    border-top: dashed 3px $road-color;
+    position: relative;
+    &:after {
+      content: "";
+      display: block;
+      background-color: red;
+      width: 5px;
+      height: 57px;
+      position: absolute;
+      right: 10%;
+      top: -60px;
+    }
+  }
+}
