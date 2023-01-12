@@ -9,7 +9,41 @@
 </head>
 
 <body>
-
+  <main class="race">
+    <header class="race__header">
+      <button class="race__garage">To Garage</button>
+      <button class="race__winners">To Winners</button>
+    </header>
+    <section class="race__generator">
+      <div class="race__generator-create">
+        <input type="text" class="race__generator-create-name">
+        <input type="color" class="race__generator-create-color">
+        <button class="race__generator-create-button">CREATE</button>
+      </div>
+      <div class="race__generator-update">
+        <input type="text" class="race__generator-update-name">
+        <input type="color" class="race__generator-update-color">
+        <button class="race__generator-update-button">UPDATE</button>
+      </div>
+    </section>
+    <section class="race__garage">
+      <h1 class="race__garage-header">Garage<span class="race__garage-header-count">999</span></h1>
+      <p class="race__garage-page">Page #<span class="race__garage-page-number">7</span></p>
+      <ul class="race__garage-list">
+        <li class="race__garage-list-item">
+          <div class="race__garage-list-item-header">
+            <button class="race__garage-list-item-select">SELECT</button>
+            <button class="race__garage-list-item-remove">REMOVE</button>
+            <p class="race__garage-list-item-name">Aston Martin 7</p>
+            <button class="race__garage-list-item-start">A</button>
+            <button class="race__garage-list-item-stop">B</button>
+          </div>
+          <div class="race__garage-list-item-car"></div>
+          <div class="race__garage-list-item-road"></div>
+        </li>
+      </ul>
+    </section>
+  </main>
 </body>
 
 </html>

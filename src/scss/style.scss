@@ -1,0 +1,12 @@
+@import "./blocks/reset";
+@import "./blocks/variables";
+
+html {
+  font-size: 18px;
+}
+
+body {
+  color: $font-color;
+  background-color: $background-main;
+  user-select: none;
+}
