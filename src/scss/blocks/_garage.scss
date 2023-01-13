@@ -20,6 +20,9 @@
     border-radius: 5px;
     font-weight: 900;
   }
+  &-list-item-controls {
+    margin-bottom: 20px;
+  }
   &-list-item-start,
   &-list-item-stop {
     width: 30px;
@@ -28,7 +31,7 @@
     border-radius: 5px;
   }
   &-list-item-road {
-    width: 95%;
+    width: 100%;
     border-top: dashed 3px $road-color;
     position: relative;
     &:after {
@@ -41,5 +44,14 @@
       right: 10%;
       top: -60px;
     }
+  }
+}
+
+@keyframes ride {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
   }
 }

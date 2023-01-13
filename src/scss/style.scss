@@ -22,7 +22,8 @@ body {
 button {
   transition: all 0.5s;
   &:hover {
-    transform: scale(1.05);
+    background-color: $buttor-active-color;
+    color: $font-color;
   }
 }
 
@@ -31,6 +32,5 @@ button {
 }
 
 #car {
-  fill: #ffb600;
   width: 70px;
 }
