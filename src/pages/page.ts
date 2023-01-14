@@ -65,7 +65,7 @@ class Page {
     </div>
     <div class="race__garage-list-item-controls">
       <button class="race__garage-list-item-start"> A </button>
-      <button class="race__garage-list-item-stop"> B </button>
+      <button class="race__garage-list-item-stop carBtn-active"> B </button>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 19" id="car" fill=${color}>
       <path

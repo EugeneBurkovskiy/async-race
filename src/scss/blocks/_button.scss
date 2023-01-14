@@ -1,0 +1,13 @@
+button {
+  transition: all 0.5s;
+  &:hover {
+    background-color: $buttor-active-color;
+    color: $font-color;
+  }
+}
+
+.carBtn-active {
+  background-color: $color-button-active;
+  color: $color-font-active;
+  pointer-events: none;
+}

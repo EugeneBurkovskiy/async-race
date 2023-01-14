@@ -3,3 +3,9 @@ export interface ICar {
   color: string;
   id: number;
 }
+
+export interface IEngine {
+  velocity: number;
+  distance: number;
+  success: boolean;
+}

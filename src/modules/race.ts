@@ -1,5 +1,6 @@
 import Page from '../pages/page';
 import API from './api';
+import Service from './service';
 
 class Race {
   page: Page;
@@ -8,9 +9,12 @@ class Race {
 
   body: HTMLElement;
 
+  service: Service;
+
   constructor() {
     this.page = new Page();
     this.api = new API();
+    this.service = new Service();
     this.body = document.querySelector('body') as HTMLElement;
   }
 
@@ -25,27 +29,22 @@ class Race {
   }
 
   startEvents() {
-    this.body.addEventListener('click', (e) => {
+    this.body.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
       if (target && target.classList.contains('race__garage-list-item-start')) {
-        const car = target.closest('.race__garage-list-item')?.querySelector('#car') as HTMLDivElement;
-        this.startRide(500, 3000, car);
+        this.service.moveCar(target).then(() => target.classList.remove('carBtn-active'));
+        target.nextElementSibling?.classList.remove('carBtn-active');
+      }
+      if (target && target.classList.contains('race__garage-list-item-stop')) {
+        const track = target.closest('.race__garage-list-item') as HTMLLIElement;
+        this.api.patchEngine(+track.id, 'stopped').then(() => {
+          target.previousElementSibling?.classList.remove('carBtn-active');
+          target.classList.add('carBtn-active');
+          const car = track.querySelector('#car') as HTMLDivElement;
+          car.style.transform = `translateX(0px)`;
+        });
       }
     });
-  }
-
-  startRide(endX: number, duration: number, element: HTMLDivElement) {
-    let currentX = parseInt(window.getComputedStyle(element).transformOrigin);
-    const framesCount = (duration / 1000) * 60;
-    const dx = (endX - parseInt(window.getComputedStyle(element).transformOrigin)) / framesCount;
-    const tick = () => {
-      currentX += dx;
-      element.style.transform = `translateX(${currentX}px)`;
-      if (currentX < endX) {
-        window.requestAnimationFrame(tick);
-      }
-    };
-    tick();
   }
 }
 

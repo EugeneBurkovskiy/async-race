@@ -3,6 +3,7 @@
 @import "./blocks/header";
 @import "./blocks//generator";
 @import "./blocks/garage";
+@import "./blocks/button";
 
 @font-face {
   font-family: "Montserrat";
@@ -17,14 +18,6 @@ body {
   color: $font-color;
   background-color: $background-main;
   user-select: none;
-}
-
-button {
-  transition: all 0.5s;
-  &:hover {
-    background-color: $buttor-active-color;
-    color: $font-color;
-  }
 }
 
 .race {
