@@ -11,11 +11,14 @@ class Race {
 
   service: Service;
 
+  winners: Map<string, number>;
+
   constructor() {
     this.page = new Page();
     this.api = new API();
     this.service = new Service();
     this.body = document.querySelector('body') as HTMLElement;
+    this.winners = new Map();
   }
 
   renderGarage() {
@@ -32,8 +35,7 @@ class Race {
     this.body.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
       if (target && target.classList.contains('race__garage-list-item-start')) {
-        this.service.moveCar(target).then(() => target.classList.remove('carBtn-active'));
-        target.nextElementSibling?.classList.remove('carBtn-active');
+        this.service.startMove(target);
       }
       if (target && target.classList.contains('race__garage-list-item-stop')) {
         const track = target.closest('.race__garage-list-item') as HTMLLIElement;
@@ -43,6 +45,14 @@ class Race {
           const car = track.querySelector('#car') as HTMLDivElement;
           car.style.transform = `translateX(0px)`;
         });
+      }
+      if (target && target.classList.contains('race__generator-start-race')) {
+        this.service.moveAllCars(target);
+        target.classList.remove('carBtn-active');
+      }
+      if (target && target.classList.contains('race__generator-reset-race')) {
+        this.service.stopAllCars(target);
+        target.classList.remove('carBtn-active');
       }
     });
   }

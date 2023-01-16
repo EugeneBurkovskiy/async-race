@@ -6,7 +6,10 @@
     "strict": true,
     "outDir": "./dist",
     "noImplicitAny": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": [
+      "es2021"
+    ]
   },
   "include": [
     "src"

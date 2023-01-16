@@ -11,19 +11,19 @@
 }
 html {
   font-family: "Montserrat";
-  font-size: 18px;
 }
 
 body {
   color: $font-color;
   background-color: $background-main;
   user-select: none;
+  font-weight: 900;
 }
 
 .race {
-  padding: 50px;
+  padding: 20px;
 }
 
 #car {
-  width: 70px;
+  width: 40px;
 }

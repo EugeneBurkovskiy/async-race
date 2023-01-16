@@ -25,13 +25,18 @@ class Page {
     generator.innerHTML = `
     <div class="race__generator-create">
       <input type="text" class="race__generator-create-name">
-      <input type="color" class="race__generator-create-color" value="#f6b73c">
+      <input type="color" class="race__generator-create-color" value="#0066ff">
       <button class="race__generator-create-button">CREATE</button>
     </div>
     <div class="race__generator-update">
       <input type="text" class="race__generator-update-name">
-      <input type="color" class="race__generator-update-color" value="#f6b73c">
+      <input type="color" class="race__generator-update-color" value="#fbff00">
       <button class="race__generator-update-button">UPDATE</button>
+    </div>
+    <div class="race__generator-controls-race">
+      <button class="race__generator-start-race">RACE</button>
+      <button class="race__generator-reset-race">RESET</button>
+      <button class="race__generator-generate-button">GENERATE CARS</button>
     </div>
     `;
     return generator;
@@ -46,11 +51,14 @@ class Page {
       cars += this.createCar(car.name, car.color, car.id);
     });
     garage.innerHTML = `
-    <h1 class="race__garage-header">Garage(<span class="race__garage-header-count">${carsCount}</span>)</h1>
+    <h2 class="race__garage-header">Garage(<span class="race__garage-header-count">${carsCount}</span>)</h2>
     <p class="race__garage-page">Page #<span class="race__garage-page-number">7</span></p>
     <ul class="race__garage-list">
       ${cars}
     </ul>
+    <div class="race__champion">
+      <h2 class="race__champion-title">Car #1 won!!!</h2>
+    </div>
   `;
     return garage;
   }

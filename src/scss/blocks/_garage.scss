@@ -1,13 +1,13 @@
 .race__garage {
   &-header {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
   }
   &-page {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   &-list-item {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
   &-list-item-header {
     display: flex;
@@ -18,16 +18,11 @@
   &-list-item-remove {
     width: 80px;
     border-radius: 5px;
-    font-weight: 900;
-  }
-  &-list-item-controls {
-    margin-bottom: 20px;
   }
   &-list-item-start,
   &-list-item-stop {
     width: 20px;
     height: 25px;
-    font-weight: 900;
     border-radius: 5px;
   }
   &-list-item-road {
@@ -41,10 +36,26 @@
       width: 5px;
       height: 57px;
       position: absolute;
-      right: 10%;
+      right: 3%;
       top: -60px;
     }
   }
+}
+
+.race__champion {
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  &-title {
+    font-size: 3rem;
+  }
+  display: none;
 }
 
 @keyframes ride {
