@@ -44,21 +44,19 @@ class Service {
       tick();
       return duration;
     });
-    const res = await this.api
+    return this.api
       .patchEngine(id, 'drive')
       .then(() => [id, time])
       .catch(() => {
         window.cancelAnimationFrame(animId);
-        throw new Error(`Car has been stopped suddenly. It's engine was broken down.`);
+        throw new Error(`${id}Car has been stopped suddenly. It's engine was broken down.`);
       });
-    return res;
   }
 
   async moveAllCars(target: HTMLElement) {
     const pedals = [...(document.querySelectorAll('.race__garage-list-item-start') as NodeListOf<HTMLDivElement>)];
     target.classList.add('carBtn-active');
-    const winner = await Promise.any(pedals.map((pedal) => this.startMove(pedal)));
-    this.getWinner(winner);
+    Promise.any(pedals.map((pedal) => this.startMove(pedal))).then((data) => this.getWinner(data));
   }
 
   stopAllCars(target: HTMLElement) {
@@ -70,11 +68,10 @@ class Service {
   }
 
   getWinner(args: number[]) {
-    console.log(args);
     this.api.getCar(`${args[0]}`).then((data: ICar) => {
       const champion = document.querySelector('.race__champion-title') as HTMLHeadElement;
       const championBlock = document.querySelector('.race__champion') as HTMLDivElement;
-      const time = (args[1] / 1000).toFixed(3);
+      const time = (args[1] / 1000).toFixed(2);
       champion.textContent = `Winner: ${data.name} (${time})s`;
       championBlock.style.display = 'flex';
       setTimeout(() => (championBlock.style.display = 'none'), 3000);

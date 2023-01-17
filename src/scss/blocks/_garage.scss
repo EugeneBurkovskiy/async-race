@@ -54,6 +54,7 @@
   z-index: 10;
   &-title {
     font-size: 3rem;
+    text-align: center;
   }
   display: none;
 }
@@ -64,5 +65,29 @@
   }
   to {
     transform: translateX(100%);
+  }
+}
+
+@media (max-width: 1024px) {
+  .race__garage-list-item-road {
+    &:after {
+      right: 4%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .race__garage-list-item-road {
+    &:after {
+      right: 6%;
+    }
+  }
+}
+
+@media (max-width: 425px) {
+  .race__garage-list-item-road {
+    &:after {
+      right: 12%;
+    }
   }
 }
