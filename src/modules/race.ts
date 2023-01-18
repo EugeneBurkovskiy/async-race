@@ -18,14 +18,16 @@ class Race {
     this.body = document.querySelector('body') as HTMLElement;
   }
 
-  renderGarage() {
+  renderMain() {
     this.api.getCars(this.service.pageNumber).then((data) => {
       const garage = this.page.createGarage(data);
       const main = this.page.createMain();
       main.append(this.page.createHeader(), this.page.createGenerator(), garage);
       this.body.append(main);
+      this.service.updateTotalCarsValue();
       this.startDriveEvents();
       this.startGeneratorEvents();
+      this.startPaginationEvents();
     });
   }
 
@@ -85,6 +87,19 @@ class Race {
     });
     nameUpdateInput.addEventListener('input', () => {
       this.service.changeGeneratorBtnsStyle(nameUpdateInput.value, '.race__generator-update-button');
+    });
+  }
+
+  startPaginationEvents() {
+    const prevBtn = document.querySelector('.race__garage-pages-prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.race__garage-pages-next') as HTMLButtonElement;
+    prevBtn.addEventListener('click', () => {
+      this.service.pageNumber -= 1;
+      this.service.updatePage();
+    });
+    nextBtn.addEventListener('click', () => {
+      this.service.pageNumber += 1;
+      this.service.updatePage();
     });
   }
 }

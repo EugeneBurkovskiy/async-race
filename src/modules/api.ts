@@ -1,6 +1,13 @@
 class API {
-  async getCars(page: number, limitQuery = `&_limit${7}`) {
-    const response = await fetch(`http://127.0.0.1:3000/garage/?_page${page}${limitQuery}`).then((data) => data.json());
+  async getCars(page = 1, limit = 7) {
+    const response = await fetch(`http://127.0.0.1:3000/garage/?_page=${page}&_limit=${limit}`).then((data) =>
+      data.json()
+    );
+    return response;
+  }
+
+  async getTotalCars() {
+    const response = await fetch(`http://127.0.0.1:3000/garage`).then((data) => data.json());
     return response;
   }
 

@@ -116,7 +116,7 @@ class Service {
 
   async updateTotalCarsValue() {
     const container = document.querySelector('.race__garage-header-count') as HTMLSpanElement;
-    const carsCount = await this.api.getCars(1, '').then((data) => data.length);
+    const carsCount = await this.api.getTotalCars().then((data) => data.length);
     container.textContent = `${carsCount}`;
   }
 
@@ -127,6 +127,17 @@ class Service {
     } else {
       btn.classList.add('carBtn-active');
     }
+  }
+
+  async updatePage() {
+    const carList = document.querySelector('.race__garage-list') as HTMLUListElement;
+    const page = document.querySelector('.race__garage-page-number') as HTMLSpanElement;
+    carList.innerHTML = '';
+    const data: ICar[] = await this.api.getCars(this.pageNumber);
+    data.forEach((item) => {
+      carList.innerHTML += `${this.page.createCar(item.name, item.color, item.id)}`;
+    });
+    page.textContent = `${this.pageNumber}`;
   }
 }
 

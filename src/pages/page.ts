@@ -91,7 +91,10 @@ class Page {
 
   addCar(name: string, color: string, id: number) {
     const carList = document.querySelector('.race__garage-list') as HTMLUListElement;
-    carList.innerHTML += this.createCar(name, color, id);
+    const cars = carList.querySelectorAll('.race__garage-list-item') as NodeListOf<HTMLLIElement>;
+    if (cars.length < 7) {
+      carList.innerHTML += this.createCar(name, color, id);
+    }
   }
 }
 export default Page;

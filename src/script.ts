@@ -4,6 +4,6 @@ import './scss/style.scss';
 
 function main() {
   const race = new Race();
-  race.renderGarage();
+  race.renderMain();
 }
 main();
