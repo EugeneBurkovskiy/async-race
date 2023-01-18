@@ -11,27 +11,25 @@ class Race {
 
   service: Service;
 
-  winners: Map<string, number>;
-
   constructor() {
     this.page = new Page();
     this.api = new API();
     this.service = new Service();
     this.body = document.querySelector('body') as HTMLElement;
-    this.winners = new Map();
   }
 
   renderGarage() {
-    this.api.getCars().then((data) => {
+    this.api.getCars(this.service.pageNumber).then((data) => {
       const garage = this.page.createGarage(data);
       const main = this.page.createMain();
       main.append(this.page.createHeader(), this.page.createGenerator(), garage);
       this.body.append(main);
-      this.startEvents();
+      this.startDriveEvents();
+      this.startGeneratorEvents();
     });
   }
 
-  startEvents() {
+  startDriveEvents() {
     this.body.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
       if (target && target.classList.contains('race__garage-list-item-start')) {
@@ -48,12 +46,45 @@ class Race {
       }
       if (target && target.classList.contains('race__generator-start-race')) {
         this.service.moveAllCars(target);
-        target.classList.remove('carBtn-active');
+        target.classList.add('carBtn-active');
+        target.nextElementSibling?.classList.remove('carBtn-active');
       }
       if (target && target.classList.contains('race__generator-reset-race')) {
         this.service.stopAllCars(target);
-        target.classList.remove('carBtn-active');
+        target.classList.add('carBtn-active');
+        target.previousElementSibling?.classList.remove('carBtn-active');
       }
+    });
+  }
+
+  startGeneratorEvents() {
+    const nameCreateInput = document.querySelector('.race__generator-create-name') as HTMLInputElement;
+    const colorCreateInput = document.querySelector('.race__generator-create-color') as HTMLInputElement;
+    const nameUpdateInput = document.querySelector('.race__generator-update-name') as HTMLInputElement;
+    const colorUpdateInput = document.querySelector('.race__generator-update-color') as HTMLInputElement;
+    this.body.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.classList.contains('race__generator-create-button')) {
+        this.service.createCar(target, nameCreateInput.value, colorCreateInput.value);
+        nameCreateInput.value = '';
+      }
+      if (target && target.classList.contains('race__generator-update-button')) {
+        this.service.updateCar(target, nameUpdateInput.value, colorUpdateInput.value, this.service.carId);
+      }
+      if (target && target.classList.contains('race__garage-list-item-select')) {
+        const carTrack = target.closest('.race__garage-list-item') as HTMLLIElement;
+        carTrack.classList.toggle('race-item-selected');
+        this.service.carId = carTrack.id;
+      }
+      if (target && target.classList.contains('race__garage-list-item-remove')) {
+        this.service.removeCar(target);
+      }
+    });
+    nameCreateInput.addEventListener('input', () => {
+      this.service.changeGeneratorBtnsStyle(nameCreateInput.value, '.race__generator-create-button');
+    });
+    nameUpdateInput.addEventListener('input', () => {
+      this.service.changeGeneratorBtnsStyle(nameUpdateInput.value, '.race__generator-update-button');
     });
   }
 }

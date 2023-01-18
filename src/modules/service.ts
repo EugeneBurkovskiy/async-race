@@ -7,9 +7,15 @@ class Service {
 
   api: API;
 
+  carId: string;
+
+  pageNumber: number;
+
   constructor() {
     this.page = new Page();
     this.api = new API();
+    this.carId = '';
+    this.pageNumber = 1;
   }
 
   async startMove(target: HTMLElement) {
@@ -76,6 +82,51 @@ class Service {
       championBlock.style.display = 'flex';
       setTimeout(() => (championBlock.style.display = 'none'), 3000);
     });
+  }
+
+  async createCar(btn: HTMLElement, name: string, color: string) {
+    await this.api
+      .postCar(name, color)
+      .then((data: ICar) => {
+        this.page.addCar(data.name, data.color, data.id);
+      })
+      .then(() => btn.classList.add('carBtn-active'));
+    await this.updateTotalCarsValue();
+  }
+
+  updateCar(btn: HTMLElement, name: string, color: string, id: string) {
+    if (this.carId) {
+      this.api.putCar(name, color, id).then(() => {
+        btn.classList.add('carBtn-active');
+        const carTrack = document.getElementById(id) as HTMLLIElement;
+        const carTitle = carTrack.querySelector(`.race__garage-list-item-name`) as HTMLSpanElement;
+        const carColor = carTrack.querySelector(`#car`) as HTMLElement;
+        carTitle.textContent = name;
+        carColor.style.fill = color;
+        carTrack.classList.remove('race-item-selected');
+      });
+    }
+  }
+
+  async removeCar(target: HTMLElement) {
+    const carTrack = target.closest('.race__garage-list-item') as HTMLLIElement;
+    await this.api.deleteCar(carTrack.id).then(() => carTrack.remove());
+    await this.updateTotalCarsValue();
+  }
+
+  async updateTotalCarsValue() {
+    const container = document.querySelector('.race__garage-header-count') as HTMLSpanElement;
+    const carsCount = await this.api.getCars(1, '').then((data) => data.length);
+    container.textContent = `${carsCount}`;
+  }
+
+  changeGeneratorBtnsStyle(value: string, btnSelector: string) {
+    const btn = document.querySelector(btnSelector) as HTMLElement;
+    if (value.length > 2) {
+      btn.classList.remove('carBtn-active');
+    } else {
+      btn.classList.add('carBtn-active');
+    }
   }
 }
 
