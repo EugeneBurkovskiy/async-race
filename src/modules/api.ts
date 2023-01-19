@@ -1,23 +1,27 @@
 class API {
+  adress: string;
+
+  constructor() {
+    this.adress = 'http://127.0.0.1:3000';
+  }
+
   async getCars(page = 1, limit = 7) {
-    const response = await fetch(`http://127.0.0.1:3000/garage/?_page=${page}&_limit=${limit}`).then((data) =>
-      data.json()
-    );
+    const response = await fetch(`${this.adress}/garage/?_page=${page}&_limit=${limit}`).then((data) => data.json());
     return response;
   }
 
   async getTotalCars() {
-    const response = await fetch(`http://127.0.0.1:3000/garage`).then((data) => data.json());
+    const response = await fetch(`${this.adress}/garage`).then((data) => data.json());
     return response;
   }
 
   async getCar(id: string) {
-    const response = await fetch(`http://127.0.0.1:3000/garage/${id}`).then((data) => data.json());
+    const response = await fetch(`${this.adress}/garage/${id}`).then((data) => data.json());
     return response;
   }
 
   async patchEngine(id: number, status: string) {
-    const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=${status}`, {
+    const response = await fetch(`${this.adress}/engine/?id=${id}&status=${status}`, {
       method: 'PATCH',
     }).then((data) => data.json());
     return response;
@@ -28,7 +32,7 @@ class API {
       name: nameValue,
       color: colorValue,
     };
-    const response = await fetch('http://127.0.0.1:3000/garage', {
+    const response = await fetch(`${this.adress}/garage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +47,7 @@ class API {
       name: nameValue,
       color: colorValue,
     };
-    const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+    const response = await fetch(`${this.adress}/garage/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +59,7 @@ class API {
   }
 
   async deleteCar(id: string) {
-    const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+    const response = await fetch(`${this.adress}/garage/${id}`, {
       method: 'DELETE',
     }).then((data) => data.json());
     return response;

@@ -28,6 +28,7 @@ class Race {
       this.startDriveEvents();
       this.startGeneratorEvents();
       this.startPaginationEvents();
+      this.startRandomGeneration();
     });
   }
 
@@ -100,6 +101,13 @@ class Race {
     nextBtn.addEventListener('click', () => {
       this.service.pageNumber += 1;
       this.service.updatePage();
+    });
+  }
+
+  startRandomGeneration() {
+    const generationBtn = document.querySelector('.race__generator-generate-button') as HTMLButtonElement;
+    generationBtn.addEventListener('click', () => {
+      this.service.createRandomCars();
     });
   }
 }

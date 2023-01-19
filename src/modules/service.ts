@@ -1,6 +1,7 @@
 import Page from '../pages/page';
 import { ICar, IEngine } from '../types/types';
 import API from './api';
+import carNamesArr from './carsNameList';
 
 class Service {
   page: Page;
@@ -80,7 +81,7 @@ class Service {
       const time = (args[1] / 1000).toFixed(2);
       champion.textContent = `Winner: ${data.name} (${time})s`;
       championBlock.style.display = 'flex';
-      setTimeout(() => (championBlock.style.display = 'none'), 3000);
+      setTimeout(() => (championBlock.style.display = 'none'), 5000);
     });
   }
 
@@ -138,6 +139,25 @@ class Service {
       carList.innerHTML += `${this.page.createCar(item.name, item.color, item.id)}`;
     });
     page.textContent = `${this.pageNumber}`;
+  }
+
+  async createRandomCars() {
+    const randomCarsArr = [];
+    for (let i = 0; i < 100; i++) {
+      const brand = carNamesArr[0][Math.floor(Math.random() * carNamesArr[0].length)];
+      const model = carNamesArr[1][Math.floor(Math.random() * carNamesArr[1].length)];
+      const color = '#' + (Math.random().toString(16) + '000000').substring(2, 8).toUpperCase();
+      const name = `${brand} ${model}`;
+      randomCarsArr.push([name, color]);
+    }
+    await Promise.all(
+      randomCarsArr.map((item) =>
+        this.api.postCar(item[0], item[1]).then((data: ICar) => {
+          this.page.addCar(data.name, data.color, data.id);
+        })
+      )
+    );
+    await this.updateTotalCarsValue();
   }
 }
 
