@@ -9,3 +9,9 @@ export interface IEngine {
   distance: number;
   success: boolean;
 }
+
+export interface IWinner {
+  id: number;
+  wins: number;
+  time: number;
+}

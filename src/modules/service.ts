@@ -1,5 +1,4 @@
 import Page from '../pages/page';
-import { ICar, IEngine } from '../types/types';
 import API from './api';
 import carNamesArr from './carsNameList';
 
@@ -12,11 +11,14 @@ class Service {
 
   pageNumber: number;
 
+  totalPageNumber: number;
+
   constructor() {
     this.page = new Page();
     this.api = new API();
     this.carId = '';
     this.pageNumber = 1;
+    this.totalPageNumber = 1;
   }
 
   async startMove(target: HTMLElement) {
@@ -43,7 +45,7 @@ class Service {
       }
     };
 
-    const time = await this.api.patchEngine(id, 'started').then((data: IEngine) => {
+    const time = await this.api.patchEngine(id, 'started').then((data) => {
       const duration = data.distance / data.velocity;
       const framesCount = (duration / 1000) * 60;
       currentX = parseInt(window.getComputedStyle(car).transformOrigin);
@@ -63,7 +65,11 @@ class Service {
   async moveAllCars(target: HTMLElement) {
     const pedals = [...(document.querySelectorAll('.race__garage-list-item-start') as NodeListOf<HTMLDivElement>)];
     target.classList.add('carBtn-active');
-    Promise.any(pedals.map((pedal) => this.startMove(pedal))).then((data) => this.getWinner(data));
+    Promise.any(pedals.map((pedal) => this.startMove(pedal)))
+      .then((data) => this.showWinner(data))
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   stopAllCars(target: HTMLElement) {
@@ -74,21 +80,31 @@ class Service {
     });
   }
 
-  getWinner(args: number[]) {
-    this.api.getCar(`${args[0]}`).then((data: ICar) => {
-      const champion = document.querySelector('.race__champion-title') as HTMLHeadElement;
-      const championBlock = document.querySelector('.race__champion') as HTMLDivElement;
-      const time = (args[1] / 1000).toFixed(2);
+  async showWinner(args: number[]) {
+    const champion = document.querySelector('.race__champion-title') as HTMLHeadElement;
+    const championBlock = document.querySelector('.race__champion') as HTMLDivElement;
+    this.api.getCar(`${args[0]}`).then(async (data) => {
+      const time = parseFloat((args[1] / 1000).toFixed(2));
       champion.textContent = `Winner: ${data.name} (${time})s`;
       championBlock.style.display = 'flex';
       setTimeout(() => (championBlock.style.display = 'none'), 5000);
+
+      await this.api.postWinner(data.id, 1, time).catch(async () => {
+        const winnerObj = await this.api.getWinner(data.id);
+        const bestTime = winnerObj.time;
+        if (bestTime > time) {
+          winnerObj.time = time;
+        }
+        winnerObj.wins += 1;
+        await this.api.updateWinner(winnerObj.id, winnerObj.wins, winnerObj.time);
+      });
     });
   }
 
   async createCar(btn: HTMLElement, name: string, color: string) {
     await this.api
       .postCar(name, color)
-      .then((data: ICar) => {
+      .then((data) => {
         this.page.addCar(data.name, data.color, data.id);
       })
       .then(() => btn.classList.add('carBtn-active'));
@@ -118,7 +134,8 @@ class Service {
   async updateTotalCarsValue() {
     const container = document.querySelector('.race__garage-header-count') as HTMLSpanElement;
     const carsCount = await this.api.getTotalCars().then((data) => data.length);
-    container.textContent = `${carsCount}`;
+    this.totalPageNumber = Math.ceil(carsCount / 7);
+    container.textContent = `Cars: ${carsCount} Pages: ${this.totalPageNumber}`;
   }
 
   changeGeneratorBtnsStyle(value: string, btnSelector: string) {
@@ -130,11 +147,11 @@ class Service {
     }
   }
 
-  async updatePage() {
+  async updateGaragePage() {
     const carList = document.querySelector('.race__garage-list') as HTMLUListElement;
     const page = document.querySelector('.race__garage-page-number') as HTMLSpanElement;
+    const data = await this.api.getCars(this.pageNumber);
     carList.innerHTML = '';
-    const data: ICar[] = await this.api.getCars(this.pageNumber);
     data.forEach((item) => {
       carList.innerHTML += `${this.page.createCar(item.name, item.color, item.id)}`;
     });
@@ -152,12 +169,25 @@ class Service {
     }
     await Promise.all(
       randomCarsArr.map((item) =>
-        this.api.postCar(item[0], item[1]).then((data: ICar) => {
+        this.api.postCar(item[0], item[1]).then((data) => {
           this.page.addCar(data.name, data.color, data.id);
         })
       )
     );
     await this.updateTotalCarsValue();
+  }
+
+  async updateWinnersTable() {
+    const list = document.querySelector('.race__winners-list') as HTMLUListElement;
+    list.innerHTML = '';
+    const winersArr = await this.api.getWinners();
+    const carsPropsArr = await Promise.all(winersArr.map((item) => this.api.getCar(`${item.id}`)));
+    winersArr.forEach((item, i) => {
+      const carPropsObj = carsPropsArr.find((car) => car.id === item.id);
+      if (carPropsObj) {
+        list.append(this.page.createWinnerCar(carPropsObj.color, carPropsObj.name, item.wins, item.time, i + 1));
+      }
+    });
   }
 }
 

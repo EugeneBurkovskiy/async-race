@@ -1,0 +1,52 @@
+.race__winners {
+  display: none;
+  &-header {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 900;
+  }
+  &-page {
+    margin-bottom: 15px;
+  }
+  &-list {
+    width: 100%;
+    display: grid;
+    row-gap: 20px;
+    margin-bottom: 50px;
+  }
+  &-heads {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    background-color: #0066ff;
+    border-radius: 10px;
+    height: 30px;
+    margin-bottom: 20px;
+    p {
+      align-self: center;
+      justify-self: center;
+    }
+  }
+  &-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    p,
+    svg {
+      justify-self: center;
+      align-self: center;
+    }
+  }
+  &-pages {
+    display: flex;
+    justify-content: space-around;
+    &-next,
+    &-prev {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      width: 100px;
+      height: 35px;
+      border-radius: 10px;
+    }
+  }
+}

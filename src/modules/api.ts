@@ -1,3 +1,5 @@
+import { ICar, IEngine, IWinner } from '../types/types';
+
 class API {
   adress: string;
 
@@ -6,22 +8,24 @@ class API {
   }
 
   async getCars(page = 1, limit = 7) {
-    const response = await fetch(`${this.adress}/garage/?_page=${page}&_limit=${limit}`).then((data) => data.json());
+    const response: ICar[] = await fetch(`${this.adress}/garage/?_page=${page}&_limit=${limit}`).then((data) =>
+      data.json()
+    );
     return response;
   }
 
   async getTotalCars() {
-    const response = await fetch(`${this.adress}/garage`).then((data) => data.json());
+    const response: ICar[] = await fetch(`${this.adress}/garage`).then((data) => data.json());
     return response;
   }
 
   async getCar(id: string) {
-    const response = await fetch(`${this.adress}/garage/${id}`).then((data) => data.json());
+    const response: ICar = await fetch(`${this.adress}/garage/${id}`).then((data) => data.json());
     return response;
   }
 
   async patchEngine(id: number, status: string) {
-    const response = await fetch(`${this.adress}/engine/?id=${id}&status=${status}`, {
+    const response: IEngine = await fetch(`${this.adress}/engine/?id=${id}&status=${status}`, {
       method: 'PATCH',
     }).then((data) => data.json());
     return response;
@@ -32,7 +36,7 @@ class API {
       name: nameValue,
       color: colorValue,
     };
-    const response = await fetch(`${this.adress}/garage`, {
+    const response: ICar = await fetch(`${this.adress}/garage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,14 +51,13 @@ class API {
       name: nameValue,
       color: colorValue,
     };
-    const response = await fetch(`${this.adress}/garage/${id}`, {
+    const response: ICar = await fetch(`${this.adress}/garage/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(obj),
     }).then((data) => data.json());
-    console.log(response);
     return response;
   }
 
@@ -62,6 +65,47 @@ class API {
     const response = await fetch(`${this.adress}/garage/${id}`, {
       method: 'DELETE',
     }).then((data) => data.json());
+    return response;
+  }
+
+  async postWinner(id: number, wins: number, time: number) {
+    const obj = {
+      id: id,
+      wins: wins,
+      time: time,
+    };
+    const response: IWinner = await fetch(`${this.adress}/winners`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
+    }).then((data) => data.json());
+    return response;
+  }
+
+  async getWinners() {
+    const response: IWinner[] = await fetch(`${this.adress}/winners`).then((data) => data.json());
+    return response;
+  }
+
+  async updateWinner(id: number, wins: number, time: number) {
+    const obj = {
+      wins: wins,
+      time: time,
+    };
+    const response: IWinner = await fetch(`${this.adress}/winners/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
+    }).then((data) => data.json());
+    return response;
+  }
+
+  async getWinner(id: number) {
+    const response: IWinner = await fetch(`${this.adress}/winners/${id}`).then((data) => data.json());
     return response;
   }
 }
