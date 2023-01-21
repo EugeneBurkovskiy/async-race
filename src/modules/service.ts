@@ -13,12 +13,24 @@ class Service {
 
   totalPageNumber: number;
 
+  order: string;
+
+  sort: string;
+
+  totalWinnersPageNumber: number;
+
+  winnersPageNumber: number;
+
   constructor() {
     this.page = new Page();
     this.api = new API();
     this.carId = '';
     this.pageNumber = 1;
     this.totalPageNumber = 1;
+    this.winnersPageNumber = 1;
+    this.totalWinnersPageNumber = 1;
+    this.sort = '';
+    this.order = '';
   }
 
   async startMove(target: HTMLElement) {
@@ -127,6 +139,7 @@ class Service {
 
   async removeCar(target: HTMLElement) {
     const carTrack = target.closest('.race__garage-list-item') as HTMLLIElement;
+    await this.api.deleteWinner(carTrack.id);
     await this.api.deleteCar(carTrack.id).then(() => carTrack.remove());
     await this.updateTotalCarsValue();
   }
@@ -179,15 +192,55 @@ class Service {
 
   async updateWinnersTable() {
     const list = document.querySelector('.race__winners-list') as HTMLUListElement;
-    list.innerHTML = '';
-    const winersArr = await this.api.getWinners();
+    const totalCount = document.querySelector('.race__winners-header-count') as HTMLSpanElement;
+    const totalWinersArr = await this.api.getTotalWinners();
+    const winersArr = await this.api.getWinners(this.winnersPageNumber, this.sort, this.order);
+    this.totalWinnersPageNumber = Math.ceil(totalWinersArr.length / 10);
+    totalCount.textContent = `Cars: ${totalWinersArr.length} Pages: ${this.totalWinnersPageNumber}`;
     const carsPropsArr = await Promise.all(winersArr.map((item) => this.api.getCar(`${item.id}`)));
-    winersArr.forEach((item, i) => {
+    list.innerHTML = '';
+    winersArr.forEach((item) => {
       const carPropsObj = carsPropsArr.find((car) => car.id === item.id);
       if (carPropsObj) {
-        list.append(this.page.createWinnerCar(carPropsObj.color, carPropsObj.name, item.wins, item.time, i + 1));
+        list.append(this.page.createWinnerCar(carPropsObj.color, carPropsObj.name, item.wins, item.time, item.id));
       }
     });
+  }
+
+  sortByWins() {
+    const winsArrow = document.querySelector('.race__winners-heads-wins-arrow') as HTMLSpanElement;
+    const timeArrow = document.querySelector('.race__winners-heads-time-arrow') as HTMLSpanElement;
+    timeArrow.innerHTML = '';
+    this.sort = 'wins';
+    if (winsArrow.textContent === '') {
+      winsArrow.textContent = '↑';
+      this.order = 'ASC';
+    } else if (winsArrow.textContent === '↑') {
+      winsArrow.textContent = '↓';
+      this.order = 'DESC';
+    } else if (winsArrow.textContent === '↓') {
+      winsArrow.textContent = '↑';
+      this.order = 'ASC';
+    }
+    this.updateWinnersTable();
+  }
+
+  sortByTime() {
+    const winsArrow = document.querySelector('.race__winners-heads-wins-arrow') as HTMLSpanElement;
+    const timeArrow = document.querySelector('.race__winners-heads-time-arrow') as HTMLSpanElement;
+    winsArrow.innerHTML = '';
+    this.sort = 'time';
+    if (timeArrow.textContent === '') {
+      timeArrow.textContent = '↑';
+      this.order = 'ASC';
+    } else if (timeArrow.textContent === '↑') {
+      timeArrow.textContent = '↓';
+      this.order = 'DESC';
+    } else if (timeArrow.textContent === '↓') {
+      timeArrow.textContent = '↑';
+      this.order = 'ASC';
+    }
+    this.updateWinnersTable();
   }
 }
 

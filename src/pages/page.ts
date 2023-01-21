@@ -84,8 +84,8 @@ class Page {
       <p class="race__winners-heads-number">Number</p>
       <p class="race__winners-heads-car">Car</p>
       <p class="race__winners-heads-name">Name</p>
-      <p class="race__winners-heads-wins">Wins</p>
-      <p class="race__winners-heads-time">Best time (seconds)</p>
+      <p class="race__winners-heads-wins">Wins <span class="race__winners-heads-wins-arrow"></span></p>
+      <p class="race__winners-heads-time">Best time (seconds)<span class="race__winners-heads-time-arrow"></span></p>
     </div>
     <ul class="race__winners-list">
     </ul>

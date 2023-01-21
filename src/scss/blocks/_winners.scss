@@ -25,12 +25,17 @@
       align-self: center;
       justify-self: center;
     }
+    &-wins,
+    &-time {
+      cursor: pointer;
+    }
   }
   &-item {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     p,
     svg {
+      text-align: center;
       justify-self: center;
       align-self: center;
     }

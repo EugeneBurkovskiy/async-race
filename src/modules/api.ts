@@ -84,7 +84,14 @@ class API {
     return response;
   }
 
-  async getWinners() {
+  async getWinners(page: number, sort: string, order: string) {
+    const response: IWinner[] = await fetch(
+      `${this.adress}/winners/?_page=${page}&_sort=${sort}&_order=${order}&_limit=10`
+    ).then((data) => data.json());
+    return response;
+  }
+
+  async getTotalWinners() {
     const response: IWinner[] = await fetch(`${this.adress}/winners`).then((data) => data.json());
     return response;
   }
@@ -106,6 +113,13 @@ class API {
 
   async getWinner(id: number) {
     const response: IWinner = await fetch(`${this.adress}/winners/${id}`).then((data) => data.json());
+    return response;
+  }
+
+  async deleteWinner(id: string) {
+    const response = await fetch(`${this.adress}/winners/${id}`, {
+      method: 'DELETE',
+    }).then((data) => data.json());
     return response;
   }
 }

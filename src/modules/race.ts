@@ -28,8 +28,17 @@ class Race {
       this.startDriveEvents();
       this.startGeneratorEvents();
       this.startPaginationEvents();
+      // this.startGaragePaginationEvents(
+      //   '.race__garage-pages-prev',
+      //   '.race__garage-pages-next',
+      //   this.service.updateGaragePage,
+      //   this.service.totalPageNumber,
+      //   this.service.pageNumber
+      // );
       this.startGaragePaginationEvents();
       this.startRandomGeneration();
+      this.startSorting();
+      this.startWinnersPaginationEvents();
     });
   }
 
@@ -93,29 +102,6 @@ class Race {
     });
   }
 
-  startGaragePaginationEvents() {
-    const prevBtn = document.querySelector('.race__garage-pages-prev') as HTMLButtonElement;
-    const nextBtn = document.querySelector('.race__garage-pages-next') as HTMLButtonElement;
-    prevBtn.addEventListener('click', () => {
-      if (this.service.pageNumber > 1) {
-        this.service.pageNumber -= 1;
-        this.service.updateGaragePage();
-      } else {
-        this.service.pageNumber = this.service.totalPageNumber;
-        this.service.updateGaragePage();
-      }
-    });
-    nextBtn.addEventListener('click', () => {
-      if (this.service.pageNumber < this.service.totalPageNumber) {
-        this.service.pageNumber += 1;
-        this.service.updateGaragePage();
-      } else {
-        this.service.pageNumber = 1;
-        this.service.updateGaragePage();
-      }
-    });
-  }
-
   startPaginationEvents() {
     const garageBtn = document.querySelector('.race__header-garage') as HTMLButtonElement;
     const winnersBtn = document.querySelector('.race__header-winners') as HTMLButtonElement;
@@ -143,6 +129,92 @@ class Race {
     const generationBtn = document.querySelector('.race__generator-generate-button') as HTMLButtonElement;
     generationBtn.addEventListener('click', () => {
       this.service.createRandomCars();
+    });
+  }
+
+  startSorting() {
+    const winsBtn = document.querySelector('.race__winners-heads-wins') as HTMLParagraphElement;
+    const timeBtn = document.querySelector('.race__winners-heads-time') as HTMLParagraphElement;
+    winsBtn.addEventListener('click', () => {
+      this.service.sortByWins();
+    });
+    timeBtn.addEventListener('click', () => {
+      this.service.sortByTime();
+    });
+  }
+
+  // startGaragePaginationEvents(
+  //   prevBtnSelector: string,
+  //   nextBtnSelector: string,
+  //   updateFunc: { (): Promise<void>; (): void },
+  //   totalPageValue: number,
+  //   pageNumber: number
+  // ) {
+  //   const prevBtn = document.querySelector(prevBtnSelector) as HTMLButtonElement;
+  //   const nextBtn = document.querySelector(nextBtnSelector) as HTMLButtonElement;
+  //   prevBtn.addEventListener('click', () => {
+  //     if (pageNumber > 1) {
+  //       pageNumber -= 1;
+  //       updateFunc.call(this.api);
+  //     } else {
+  //       pageNumber = totalPageValue;
+  //       updateFunc.call(this.api);
+  //     }
+  //   });
+  //   nextBtn.addEventListener('click', () => {
+  //     if (pageNumber < totalPageValue) {
+  //       pageNumber += 1;
+  //       updateFunc.call(this.api);
+  //     } else {
+  //       pageNumber = 1;
+  //       updateFunc.call(this.api);
+  //     }
+  //   });
+  // }
+
+  startGaragePaginationEvents() {
+    const prevBtn = document.querySelector('.race__garage-pages-prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.race__garage-pages-next') as HTMLButtonElement;
+    prevBtn.addEventListener('click', () => {
+      if (this.service.pageNumber > 1) {
+        this.service.pageNumber -= 1;
+        this.service.updateGaragePage();
+      } else {
+        this.service.pageNumber = this.service.totalPageNumber;
+        this.service.updateGaragePage();
+      }
+    });
+    nextBtn.addEventListener('click', () => {
+      if (this.service.pageNumber < this.service.totalPageNumber) {
+        this.service.pageNumber += 1;
+        this.service.updateGaragePage();
+      } else {
+        this.service.pageNumber = 1;
+        this.service.updateGaragePage();
+      }
+    });
+  }
+
+  startWinnersPaginationEvents() {
+    const prevBtn = document.querySelector('.race__winners-pages-prev') as HTMLButtonElement;
+    const nextBtn = document.querySelector('.race__winners-pages-next') as HTMLButtonElement;
+    prevBtn.addEventListener('click', () => {
+      if (this.service.winnersPageNumber > 1) {
+        this.service.winnersPageNumber -= 1;
+        this.service.updateWinnersTable();
+      } else {
+        this.service.winnersPageNumber = this.service.totalWinnersPageNumber;
+        this.service.updateWinnersTable();
+      }
+    });
+    nextBtn.addEventListener('click', () => {
+      if (this.service.winnersPageNumber < this.service.totalWinnersPageNumber) {
+        this.service.winnersPageNumber += 1;
+        this.service.updateWinnersTable();
+      } else {
+        this.service.winnersPageNumber = 1;
+        this.service.updateWinnersTable();
+      }
     });
   }
 }
