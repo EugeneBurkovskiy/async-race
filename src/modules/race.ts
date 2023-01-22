@@ -28,13 +28,6 @@ class Race {
       this.startDriveEvents();
       this.startGeneratorEvents();
       this.startPaginationEvents();
-      // this.startGaragePaginationEvents(
-      //   '.race__garage-pages-prev',
-      //   '.race__garage-pages-next',
-      //   this.service.updateGaragePage,
-      //   this.service.totalPageNumber,
-      //   this.service.pageNumber
-      // );
       this.startGaragePaginationEvents();
       this.startRandomGeneration();
       this.startSorting();
@@ -46,7 +39,9 @@ class Race {
     this.body.addEventListener('click', async (e) => {
       const target = e.target as HTMLElement;
       if (target && target.classList.contains('race__garage-list-item-start')) {
-        this.service.startMove(target);
+        this.service
+          .startMove(target)
+          .catch(() => console.log(`Car has been stopped suddenly. It's engine was broken down.`));
       }
       if (target && target.classList.contains('race__garage-list-item-stop')) {
         const track = target.closest('.race__garage-list-item') as HTMLLIElement;
@@ -60,12 +55,9 @@ class Race {
       if (target && target.classList.contains('race__generator-start-race')) {
         this.service.moveAllCars(target);
         target.classList.add('carBtn-active');
-        target.nextElementSibling?.classList.remove('carBtn-active');
       }
       if (target && target.classList.contains('race__generator-reset-race')) {
-        this.service.stopAllCars(target);
-        target.classList.add('carBtn-active');
-        target.previousElementSibling?.classList.remove('carBtn-active');
+        this.service.stopAllCars();
       }
     });
   }
@@ -143,40 +135,9 @@ class Race {
     });
   }
 
-  // startGaragePaginationEvents(
-  //   prevBtnSelector: string,
-  //   nextBtnSelector: string,
-  //   updateFunc: { (): Promise<void>; (): void },
-  //   totalPageValue: number,
-  //   pageNumber: number
-  // ) {
-  //   const prevBtn = document.querySelector(prevBtnSelector) as HTMLButtonElement;
-  //   const nextBtn = document.querySelector(nextBtnSelector) as HTMLButtonElement;
-  //   prevBtn.addEventListener('click', () => {
-  //     if (pageNumber > 1) {
-  //       pageNumber -= 1;
-  //       updateFunc.call(this.api);
-  //     } else {
-  //       pageNumber = totalPageValue;
-  //       updateFunc.call(this.api);
-  //     }
-  //   });
-  //   nextBtn.addEventListener('click', () => {
-  //     if (pageNumber < totalPageValue) {
-  //       pageNumber += 1;
-  //       updateFunc.call(this.api);
-  //     } else {
-  //       pageNumber = 1;
-  //       updateFunc.call(this.api);
-  //     }
-  //   });
-  // }
-
   startGaragePaginationEvents() {
     const prevBtn = document.querySelector('.race__garage-pages-prev') as HTMLButtonElement;
     const nextBtn = document.querySelector('.race__garage-pages-next') as HTMLButtonElement;
-    const raceBtn = document.querySelector('.race__generator-start-race') as HTMLButtonElement;
-    const resetBtn = document.querySelector('.race__generator-reset-race') as HTMLButtonElement;
     prevBtn.addEventListener('click', () => {
       if (this.service.pageNumber > 1) {
         this.service.pageNumber -= 1;
@@ -185,8 +146,6 @@ class Race {
         this.service.pageNumber = this.service.totalPageNumber;
         this.service.updateGaragePage();
       }
-      raceBtn.classList.remove('carBtn-active');
-      resetBtn.classList.add('carBtn-active');
     });
     nextBtn.addEventListener('click', () => {
       if (this.service.pageNumber < this.service.totalPageNumber) {
@@ -196,8 +155,6 @@ class Race {
         this.service.pageNumber = 1;
         this.service.updateGaragePage();
       }
-      raceBtn.classList.remove('carBtn-active');
-      resetBtn.classList.add('carBtn-active');
     });
   }
 

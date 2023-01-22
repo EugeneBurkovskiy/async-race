@@ -35,7 +35,7 @@ class Page {
     </div>
     <div class="race__generator-controls-race">
       <button class="race__generator-start-race">RACE</button>
-      <button class="race__generator-reset-race carBtn-active">RESET</button>
+      <button class="race__generator-reset-race">RESET</button>
       <button class="race__generator-generate-button">GENERATE CARS</button>
     </div>
     `;

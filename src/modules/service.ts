@@ -73,7 +73,7 @@ class Service {
       .then(() => [id, time])
       .catch(() => {
         window.cancelAnimationFrame(animId);
-        throw new Error(`${id}Car has been stopped suddenly. It's engine was broken down.`);
+        throw new Error(`Car has been stopped suddenly. It's engine was broken down.`);
       });
   }
 
@@ -81,15 +81,17 @@ class Service {
     const pedals = [...(document.querySelectorAll('.race__garage-list-item-start') as NodeListOf<HTMLDivElement>)];
     target.classList.add('carBtn-active');
     Promise.any(pedals.map((pedal) => this.startMove(pedal)))
-      .then((data) => this.showWinner(data))
+      .then((data) => {
+        this.showWinner(data);
+        target.classList.remove('carBtn-active');
+      })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err);
       });
   }
 
-  stopAllCars(target: HTMLElement) {
+  stopAllCars() {
     const pedals = document.querySelectorAll('.race__garage-list-item-stop') as NodeListOf<HTMLDivElement>;
-    target.classList.add('carBtn-active');
     pedals.forEach((pedal) => {
       pedal.click();
     });
@@ -145,6 +147,7 @@ class Service {
     await this.api.deleteWinner(carTrack.id);
     await this.api.deleteCar(carTrack.id).then(() => carTrack.remove());
     await this.updateTotalCarsValue();
+    this.updateGaragePage();
   }
 
   async updateTotalCarsValue() {
