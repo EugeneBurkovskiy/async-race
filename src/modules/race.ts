@@ -175,6 +175,8 @@ class Race {
   startGaragePaginationEvents() {
     const prevBtn = document.querySelector('.race__garage-pages-prev') as HTMLButtonElement;
     const nextBtn = document.querySelector('.race__garage-pages-next') as HTMLButtonElement;
+    const raceBtn = document.querySelector('.race__generator-start-race') as HTMLButtonElement;
+    const resetBtn = document.querySelector('.race__generator-reset-race') as HTMLButtonElement;
     prevBtn.addEventListener('click', () => {
       if (this.service.pageNumber > 1) {
         this.service.pageNumber -= 1;
@@ -183,6 +185,8 @@ class Race {
         this.service.pageNumber = this.service.totalPageNumber;
         this.service.updateGaragePage();
       }
+      raceBtn.classList.remove('carBtn-active');
+      resetBtn.classList.add('carBtn-active');
     });
     nextBtn.addEventListener('click', () => {
       if (this.service.pageNumber < this.service.totalPageNumber) {
@@ -192,6 +196,8 @@ class Race {
         this.service.pageNumber = 1;
         this.service.updateGaragePage();
       }
+      raceBtn.classList.remove('carBtn-active');
+      resetBtn.classList.add('carBtn-active');
     });
   }
 

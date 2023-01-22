@@ -21,6 +21,8 @@ class Service {
 
   winnersPageNumber: number;
 
+  carNumber: number;
+
   constructor() {
     this.page = new Page();
     this.api = new API();
@@ -29,6 +31,7 @@ class Service {
     this.totalPageNumber = 1;
     this.winnersPageNumber = 1;
     this.totalWinnersPageNumber = 1;
+    this.carNumber = 1;
     this.sort = '';
     this.order = '';
   }
@@ -193,16 +196,22 @@ class Service {
   async updateWinnersTable() {
     const list = document.querySelector('.race__winners-list') as HTMLUListElement;
     const totalCount = document.querySelector('.race__winners-header-count') as HTMLSpanElement;
+    const pageNumberContainer = document.querySelector('.race__winners-page-number') as HTMLSpanElement;
     const totalWinersArr = await this.api.getTotalWinners();
     const winersArr = await this.api.getWinners(this.winnersPageNumber, this.sort, this.order);
     this.totalWinnersPageNumber = Math.ceil(totalWinersArr.length / 10);
     totalCount.textContent = `Cars: ${totalWinersArr.length} Pages: ${this.totalWinnersPageNumber}`;
     const carsPropsArr = await Promise.all(winersArr.map((item) => this.api.getCar(`${item.id}`)));
+    pageNumberContainer.textContent = `${this.winnersPageNumber}`;
     list.innerHTML = '';
+    this.carNumber = this.winnersPageNumber * 10 - 10;
     winersArr.forEach((item) => {
       const carPropsObj = carsPropsArr.find((car) => car.id === item.id);
       if (carPropsObj) {
-        list.append(this.page.createWinnerCar(carPropsObj.color, carPropsObj.name, item.wins, item.time, item.id));
+        this.carNumber += 1;
+        list.append(
+          this.page.createWinnerCar(carPropsObj.color, carPropsObj.name, item.wins, item.time, this.carNumber)
+        );
       }
     });
   }
